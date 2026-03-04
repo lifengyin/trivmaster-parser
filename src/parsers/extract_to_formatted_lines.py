@@ -1,4 +1,5 @@
 from ..models.models import FormattedLine
+import json
 
 MAX_Y_DISTANCE = 2
 MAX_X1_DISTANCE = 0.5
@@ -17,6 +18,7 @@ def is_line_bold(line_chars):
     return True
 
 def extract_underlined_ranges(text_line, underlines, line_chars):
+    """Extract ranges of underlined text as (start_index, end_index) tuples."""
     underlined_ranges = []
 
     for underline in underlines:
@@ -52,14 +54,14 @@ def extract_to_formatted_lines(pdf):
 
     for page in pdf.pages[1:]:
         for text_line in page.extract_text_lines(keep_blank_chars=True):
-            text = "".join([c["text"] for c in text_line["chars"]])
+            line_chars = sorted(text_line["chars"], key=lambda c: c["x0"])
             
-            underlined_ranges = extract_underlined_ranges(text_line, page.lines, text_line["chars"])
-            text_with_underlines = insert_underline_tags(text, underlined_ranges)
+            underlined_ranges = extract_underlined_ranges(text_line, page.lines, line_chars)
+            text_with_underlines = insert_underline_tags(text_line["text"], underlined_ranges)
             
             formatted_lines.append(FormattedLine(
                 text=text_with_underlines,
-                is_bold=is_line_bold(text_line["chars"])
+                is_bold=is_line_bold(line_chars)
             ))
 
     return formatted_lines

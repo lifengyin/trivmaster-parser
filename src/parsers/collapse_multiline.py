@@ -7,7 +7,7 @@ def strip_question(text: str) -> str:
     return re.sub(r'^(\d+)\.\s*', '', text.strip())
 
 def strip_answer(text: str) -> (str, int):
-    return re.sub(r'^A:(\s+)', '', text.strip())
+    return re.sub(r'^A:\s*', '', text.strip())
 
 
 def collapse_multiline(formatted_lines: List[FormattedLine]) -> List[FormattedLine]:

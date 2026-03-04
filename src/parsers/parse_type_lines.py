@@ -5,7 +5,7 @@ import copy
 
 PATTERN_IGNORE = r'^([A-Z\s]*(QUARTER|HALF|END OF GAME)[A-Z\s]*)|(PACK[\s\d]*)$'
 PATTERN_QUESTION = r'^(\d+)\.\s+(.*)'
-PATTERN_ANSWER = r'^A:(\s+).*'
+PATTERN_ANSWER = r'^A:\s*.*'
 
 def parse_type_lines(lines: List[FormattedLine]) -> List[FormattedLine]:
     lines_with_types = []
