@@ -5,7 +5,7 @@ def find_pdfs(dir_path):
     if not pdf_dir.exists():
         raise FileNotFoundError(f"Directory {dir_path} does not exist.")
 
-    pdf_paths = [f for f in pdf_dir.iterdir() if f.suffix == '.pdf']
+    pdf_paths = [p for p in pdf_dir.rglob("*.pdf") if p.is_file()]
     if not pdf_paths:
         raise FileNotFoundError(f"No PDF files found in {dir_path}.")
 

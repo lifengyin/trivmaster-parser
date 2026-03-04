@@ -1,9 +1,13 @@
-from typing import List
-from ..models.models import Pack
 import json
 from dataclasses import asdict
+from pathlib import Path
 
-def write_output(pack: Pack) -> None:
-    with open('dist/' + pack.title + ".json", "w") as f:
+from ..models.models import Pack
+
+def write_output(pack: Pack, output_dir: str, pdf_dir: str, pdf_path: Path) -> None:
+    output_relative_path = pdf_path.relative_to(Path(pdf_dir)).with_suffix(".json")
+    output_path = Path(output_dir) / output_relative_path
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w") as f:
         pack_dict = asdict(pack)
         json.dump(pack_dict, f, indent=4)

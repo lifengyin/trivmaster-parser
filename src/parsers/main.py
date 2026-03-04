@@ -10,10 +10,10 @@ from .parse_sections import parse_sections
 from .parse_answers import parse_answers_in_sections
 from .write_output import write_output
 
-DIR_PDFS = "./pdfs"
 
-def main():
-    pdf_paths = find_pdfs(DIR_PDFS)
+def parse_pdfs(pdf_dir: str, output_dir: str):
+    pdf_paths = find_pdfs(pdf_dir)
+
     for pdf_path in pdf_paths:
         with pdfplumber.open(pdf_path) as pdf:
             formatted_lines = extract_to_formatted_lines(pdf)
@@ -23,10 +23,11 @@ def main():
             sections_with_answers = parse_answers_in_sections(sections)
 
             pack = Pack(
-                title=pdf_path.name[:-4],
+                title=pdf_path.stem,
                 sections=sections_with_answers
             )
-            
-            write_output(pack)
+
+            write_output(pack, output_dir, pdf_dir, pdf_path)
+
 if __name__ == "__main__":
-    main()
+    parse_pdfs("pdfs", "dist")
